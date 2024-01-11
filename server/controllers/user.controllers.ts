@@ -39,6 +39,12 @@ export const postUser = async (req: Request, res: Response) => {
     const newUser = UserService.createUser(sanitizedInput);
     await UserService.setUserPassword(newUser, newUser.password);
     try {
+      if (process.env.DISABLE_EMAIL_VERIFICATION === "true") {
+        await UserService.setUserVerified(newUser);
+        await UserService.saveUser(newUser);
+        return res.status(200).send({ message: "User has been created" });
+      }
+      
       await UserService.saveUser(newUser);
       const verificationToken = TokenService.createToken();
       TokenService.setUserId(verificationToken, newUser._id);
