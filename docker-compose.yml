@@ -5,7 +5,10 @@ services:
     ports:
       - "20717:20717"
     volumes:
-      - /data/db # Create a volume for the DB.
+      - db-data:/data/db # Create a volume for the DB.
+    networks:
+      - private
+
   client:
     container_name: client
     build:
@@ -20,6 +23,9 @@ services:
     volumes:
       - ./client:/app #Synchronise docker container with local change
       - /app/node_modules #Avoid re-copying local node_modules. Cache in volume.
+    networks:
+      - public
+
   server:
     build:
       context: ./server
@@ -34,3 +40,15 @@ services:
     volumes:
       - ./server:/app #Synchronise docker container with local change
       - /app/node_modules #Avoid re-copying local node_modules. Cache in volume.
+    networks:
+      - private
+      - public
+
+volumes:
+  db-data:
+
+networks:
+  private:
+    driver: bridge
+  public:
+    driver: bridge
