@@ -6,11 +6,9 @@ export default function ProfilePage() {
   return (
     <div className='container'>
       <p>
-        Hey <b>{user?.username}</b> ! Check the github repository:
+        Hey <b>{user?.username}</b>, welcome to your profile page.
+        Your email is <b>{user?.email}</b>.
       </p>
-      <a href='https://github.com/flaviuse/mern-authentification'>
-        https://github.com/flaviuse/mern-authentification
-      </a>
     </div>
   );
 }

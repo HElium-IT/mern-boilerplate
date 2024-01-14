@@ -4,7 +4,6 @@ import { attemptGetUser } from "./store/thunks/user";
 
 import {
   ConfirmPage,
-  HomePage,
   ProfilePage,
   LoginPage,
   ResetPasswordRequestPage,
@@ -12,6 +11,7 @@ import {
   LogoutPage,
   RegisterPage,
   HealthPage,
+  HomePage,
 } from "./pages";
 import { ProtectedRoute, NavBar } from "./components";
 import { useAppDispatch } from "./store/hooks";

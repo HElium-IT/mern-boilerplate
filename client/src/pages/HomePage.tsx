@@ -1,10 +1,17 @@
+import { useAppSelector } from "src/store/hooks";
+import { Navigate } from "react-router-dom";
+
 export default function Home() {
+  const { isAuth } = useAppSelector((state) => state.user);
+
   return (
-    <div className='container'>
-      <p>Check the github repo :</p>
-      <a href='https://github.com/flaviuse/mern-authentification' data-test-id='homepage-anchor'>
-        https://github.com/flaviuse/mern-authentification
-      </a>
-    </div>
+    <>
+      {
+        isAuth ? (
+          <Navigate to='/my-profile' replace />
+        ) : (
+          <Navigate to='/login' replace />
+        )}
+    </>
   );
 }
