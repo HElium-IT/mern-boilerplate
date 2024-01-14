@@ -1,0 +1,548 @@
+/** -----------------------------------------------------------------
+  * SECTION CORE
+------------------------------------------------------------------ */
+
+/* Links that point to a location on the same page will scroll
+ * smoothly down to that location. */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Hide content visually, but allow screen readers to read the
+ * content. Note that for Accessibility guidelines, this content
+ * must become visible if toggled over using a keyboard. */
+
+.visually-hidden:not(:focus):not(:active),
+.sr-only:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* Give the hidden attribute most priority - fixes issue where
+ * an html element can be marked as hidden but is still visible.
+ * Use aria-hidden="true" to hide visual elements from
+ * screen readers. */
+
+[hidden] {
+  display: none !important;
+}
+
+/* Ensures disabled elements do not accept events */
+
+[disabled] {
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+}
+
+/* Use primary color for focus styles */
+
+:focus-visible {
+  outline-color: var(--color-accent);
+  outline-offset: 3px;
+  outline-width: 2px;
+}
+
+/* Adds a margin above an element when it is the target of an ID link */
+
+* {
+  scroll-margin-top: var(--flow-space);
+  scroll-margin-bottom: var(--flow-space);
+}
+
+/* ::selection {
+  background-color: var(--color-primary-100);
+} */
+
+/** -----------------------------------------------------------------
+  * SECTION TYPOGRAPHY
+------------------------------------------------------------------ */
+
+/* Set the document's default font, color, size, and line height */
+
+body {
+  font: var(--typeset_0);
+  color: var(--text-color);
+  background: var(--page-background);
+}
+
+/* Setup flow spacing for typography elements */
+
+h1, h2, h3, h4, h5, h6, p,
+label, legend, address {
+  margin-block-end: var(--flow-space);
+}
+
+/* Double flow spacing before headings & set heading color. */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color);
+  margin-block-start: calc(var(--flow-space) * 2);
+}
+
+/* Decrease space between sequential headings */
+
+h2 + h3,
+h3 + h4,
+h4 + h5,
+h5 + h6 {
+  margin-block-start: 0;
+}
+
+/* Heading typography */
+
+h1, .txt-h1 { font: var(--typeset_4); font-weight: 800; letter-spacing: -0.01em; margin-block-start: 0;}
+h2, .txt-h2 { font: var(--typeset_3); font-weight: 600; letter-spacing: -0.01em;}
+h3, .txt-h3 { font: var(--typeset_2); font-weight: 600; letter-spacing: -0.01em; }
+h4, .txt-h4 { font: var(--typeset_1); font-weight: 700; letter-spacing: -0.01em; }
+h5, .txt-h5, h6, .txt-h6, label, th, legend { font: var(--typeset_0); font-weight: bold; }
+
+/* Set typography for small text */
+
+small, .txt-small { font: var(--typeset_-1); }
+
+/* Basic styles for inline semantics */
+
+strong { font-weight: bold; }
+em, cite { font-style: italic; }
+u { text-decoration: underline; font-style: normal;}
+
+/* Basic style for subscript and superscript text */
+
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+}
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+/* del, ins, and s styles. Note that these are opinionated and may
+ * need to be restyled to suit your use case. These pseudoelements
+ * exist to announce the presence of these elements. Read more
+ * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins#accessibility_concerns */
+
+/* del::before,
+del::after,
+ins::before,
+ins::after,
+s::before,
+s::after {
+  clip-path: inset(100%);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+} */
+
+/* del::before { content: " [deletion start] "; }
+del::after { content: " [deletion end] "; }
+ins::before { content: " [insertion start] "; }
+ins::after { content: " [insertion end] "; }
+s::before { content: " [start of stricken text] "; }
+s::after { content: " [end of stricken text] "; } */
+
+del {
+  background: var(--del-background);
+  text-decoration: line-through;
+  padding: 0.1em 0.3em;
+}
+
+ins {
+  background: var(--ins-background);
+  text-decoration: none;
+  padding: 0.1em 0.3em;
+}
+
+/* See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/s */
+
+s { text-decoration: line-through; }
+
+/* Mark styles - see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark */
+
+mark {
+  background: var(--mark-background);
+  padding: 0.1em 0.3em;
+}
+
+/* Basic styles for abbreviation. Only style differently when
+ * a title is present. */
+
+abbr { text-decoration: none; }
+abbr[title] {
+  cursor: help;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+/* Italisize q when it includes a cite */
+
+q[cite] { font-style: italic; }
+
+
+/* !SECTION TYPOGRAPHY */
+/** -----------------------------------------------------------------
+  * SECTION LINKS
+  * :not([class]) is so that the styles won't need to be overridden
+  * in special use cases like navigation / buttons
+------------------------------------------------------------------ */
+
+a:not([class]) {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* VISITED STYLES GO HERE */
+
+a:not([class]):hover,
+a:not([class]):focus {
+  text-decoration: underline;
+  text-decoration-color: var(--link-color);
+  text-decoration-thickness: 2px;
+}
+
+/*
+OPTIONAL STYLES
+Add an icon for links that go to a PDF and/or links that open in a new tab
+*/
+
+/* a:not([class])[target="_blank"]::after,
+a:not([class])[data-link-type="external"] {
+  content: ' \e91f';
+  font-size: 90%;
+}
+
+a:not([class])[href$='.pdf']::after,
+a:not([class])[data-link-type='document']::after {
+  content: '\e91d';
+  font-size: 90%;
+  padding-left: 0.1em;
+} */
+
+/* !SECTION LINKS */
+/** -----------------------------------------------------------------
+  * SECTION BLOCKQUOTE
+------------------------------------------------------------------ */
+
+/* Add basic styling for blockquotes, and provide a utility class
+ * to apply these styles outside of a quote context */
+
+blockquote,
+.callout {
+  border-left: 5px solid var(--accent-color);
+  padding: var(--sp_2) var(--sp_4);
+  margin-block-end: var(--flow-space);
+}
+
+/* Remove the bottom margin from the last child in the blockquote */
+
+blockquote :last-child,
+.callout :last-child {
+  margin-block-end: 0;
+}
+
+/* !SECTION BLOCKQUOTE */
+/** -----------------------------------------------------------------
+  * SECTION LISTS
+  * :not([class]) is so that the styles won't need to be overridden
+  * in special use cases. For example, when list markup might need
+  * to be paired with a grid layout
+------------------------------------------------------------------ */
+
+/* Set nested unordered list styles */
+
+ul:not([class]) { list-style-type: disc; }
+ul:not([class]) ul:not([class]) { list-style-type: circle; }
+ul:not([class]) ul:not([class]) ul:not([class]) { list-style-type: square; }
+
+/* Set nested ordered list styles */
+
+ol:not([class]) { list-style-type: decimal; }
+ol:not([class]) ol:not([class]) { list-style-type: upper-alpha; }
+ol:not([class]) ol:not([class]) ol:not([class]) { list-style-type: lower-roman; }
+
+/* Set indention and flow spacing for lists */
+
+ul:not([class]), ol:not([class]) {
+  margin-inline-start: 1em;
+}
+
+/* Add flow spacing to list elements */
+
+ul, ol, dl {
+  margin-block-end: var(--flow-space);
+}
+
+/* Add spacing between list items */
+
+ul:not([class]) li,
+ul:not([class]) ol,
+ul:not([class]) ul,
+ol:not([class]) li,
+ol:not([class]) ol,
+ol:not([class]) ul {
+  margin-block-end: var(--sp_1);
+}
+
+/* Ensure nested lists have the correct spacing */
+
+ul:not([class]) ol,
+ul:not([class]) ul,
+ol:not([class]) ol,
+ol:not([class]) ul {
+  margin-block-start: var(--sp_1);
+}
+
+/* Add basic styles for definition lists */
+
+dt { font-weight: bold; }
+dd { padding-inline-start: var(--flow-space); }
+
+/* !SECTION LISTS */
+/** -----------------------------------------------------------------
+  * SECTION MEDIA
+------------------------------------------------------------------ */
+
+/* Allow media to sit correctly in content flow */
+
+img,
+figure,
+video,
+.aspect-ratio,
+.video-wrapper,
+.embed-container {
+  display: block;
+  width: 100%;
+  margin: auto;
+  margin-block-end: var(--flow-space);
+}
+
+img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+/* Let SVG scale without boundaries */
+img[src$=".svg"] {
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+
+/* Basic style for figcaption */
+
+figcaption {
+  display: block;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Allow audio to sit correctly in content flow,
+ * Adjust border radius to allow consistency across browsers */
+
+audio {
+  display: block;
+  max-width: 100%;
+  border-radius: 900px;
+  margin-block-end: var(--flow-space);
+}
+
+/* Setup media wrappers */
+
+.aspect-ratio,
+.video-wrapper,
+.embed-container {
+  width: 100%;
+  padding-block-start: calc(100%/(var(--aspect-ratio)));
+  position: relative;
+}
+
+/* Define aspect ratios */
+
+.video-wrapper,
+.embed-container,
+.sixteen-by-nine { --aspect-ratio: 16/9; }
+.one-by-one { --aspect-ratio: 1/1; }
+.three-by-two { --aspect-ratio: 3/2; }
+.four-by-three { --aspect-ratio: 3/2; }
+.eight-by-five { --aspect-ratio: 8/5; }
+
+/* Position inner elements in media wrappers */
+
+.embed-container > iframe,
+.embed-container > embed,
+.embed-container > object,
+.video-wrapper > iframe,
+.video-wrapper > embed,
+.video-wrapper > object
+.aspect-ratio > iframe,
+.aspect-ratio > embed,
+.aspect-ratio > object,
+.aspect-ratio > img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Allow img to crop to avoid being stretched */
+
+.aspect-ratio > img {
+  object-fit: cover;
+}
+
+/* Wrapper to allow horizontal overflow,
+ * Useful for tables and other wide content */
+
+.overflow-x,
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* !SECTION MEDIA */
+/** -----------------------------------------------------------------
+  * SECTION RULES
+------------------------------------------------------------------ */
+
+hr {
+  border: none;
+  border-block-end: 0.5px solid var(--light-text-color);
+  width: 100%;
+  margin-block-end: var(--flow-space);
+}
+
+hr.spacer {
+  border: none;
+  margin: calc(var(--flow-space) * 2) 0;
+}
+
+/* !SECTION RULES */
+/** -----------------------------------------------------------------
+  * SECTION TABLES
+------------------------------------------------------------------ */
+
+table {
+  width: 100%;
+  margin-block-end: var(--flow-space);
+}
+
+caption {
+  padding: var(--sp_1);
+  font: var(--typeset_1);
+  text-align: left;
+}
+
+th, td {
+  font: var(--typeset_-1);
+  padding: var(--sp_1);
+  text-align: left;
+}
+
+th { font-weight: bold; }
+
+tr {
+  border-block-end: 0.5px solid var(--light-text-color);
+}
+
+tr:hover {
+  background-color: var(--element-background);
+}
+
+/* !SECTION TABLES */
+/** -----------------------------------------------------------------
+  * SECTION CODE
+------------------------------------------------------------------ */
+
+code, samp, kbd, var {
+  font-family: var(--font-mono);
+  padding: 0.1em 0.3em;
+}
+
+code, samp {
+  background-color: var(--element-background);
+}
+
+var {
+  font-style: italic;
+  font-weight: bold;
+}
+
+kbd {
+  background-color: var(--text-color);
+  color: white;
+  border-radius: 5px;
+}
+
+pre {
+  margin-bottom: var(--flow-space);
+}
+
+pre code,
+pre samp {
+  display: block;
+  padding: var(--sp_2);
+  overflow: auto;
+  font: var(--typeset_-1);
+  font-family: var(--font-mono);
+}
+
+/* !SECTION CODE */
+/** -----------------------------------------------------------------
+  * SECTION DETAILS
+------------------------------------------------------------------ */
+
+/* Display:block removes Firefox's marker
+ * ::webkit-details-marker removed Chrome & Safair's marker */
+
+details {
+  display: block;
+  position: relative;
+  margin-block-end: var(--flow-space);
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary {
+  display: block;
+  cursor: pointer;
+  padding-inline-start: 1.5em;
+  font-weight: bold;
+}
+
+summary::before {
+  position: absolute;
+  will-change: transform;
+  transition: transform 300ms ease;
+  font-size: 1em;
+  content: "▸";
+  left: 0;
+  display: inline-block;
+  text-align: center;
+  width: 1em;
+}
+
+summary:focus::before {
+  color: var(--accent-color);
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+details .details-content {
+  padding-inline-start: 1.5em;
+}
+
+/* !SECTION DETAILS */
+/* !SECTION CORE */

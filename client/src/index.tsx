@@ -6,6 +6,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
+import "./styles";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
