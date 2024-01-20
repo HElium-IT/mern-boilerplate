@@ -9,39 +9,40 @@ export interface ToolActionProps {
 
 const ToolAction: React.FC<ToolActionProps> = ({ onClick, label, active }) => {
 
-    const activeStyle = {
+    const activeStyle = () => ({
         background: "linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque)",
         color: "black",
-    }
+    })
 
-    const notActiveStyle = {
+    const notActiveStyle = () => ({
         background: "linear-gradient(45deg, lightblue 20%, blue, darkblue 60%, darkcyan)",
         color: "white"
-    }
+    })
 
     const [blockStyle, setBlockStyle] = React.useState<React.CSSProperties>({
         cursor: "pointer",
         transition: "transform 0.2s ease-in-out",
-        ...notActiveStyle
+        ...notActiveStyle()
     });
 
     useEffect(() => {
         // if active, updateStyle with a different background, with a gradient
         if (active) {
             console.log(`\n${label} is active`)
-            setBlockStyle({
+            setBlockStyle(blockStyle => ({
                 ...blockStyle,
-                ...activeStyle
-            })
+                ...activeStyle()
+            }))
         } else {
             console.log(`\n${label} is not active`)
-            setBlockStyle({
+            setBlockStyle(blockStyle => ({
                 ...blockStyle,
-                ...notActiveStyle
+                ...notActiveStyle()
             })
+            )
         }
 
-    }, [active])
+    }, [active, label])
 
 
 

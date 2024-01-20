@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Block } from "src/components/block/Block";
 import { ToolActionProps } from "./ToolAction";
 
@@ -8,7 +8,6 @@ export interface WorkspaceProps {
 }
 
 export function Workspace({ children, activeAction }: WorkspaceProps): JSX.Element {
-    const ref = useRef<HTMLDivElement>(null);
 
     const workspace_style: React.CSSProperties = { // create a container that takes all the spaces it can get from the parent
         borderRadius: "25px",
@@ -27,12 +26,7 @@ export function Workspace({ children, activeAction }: WorkspaceProps): JSX.Eleme
         minWidth: "400px",
         // darkred, crimson, darkorange, gold
         // linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque),\
-        background: "\
-        linear-gradient(-45deg, blue -90%, transparent 50%),\
-        linear-gradient(135, darkred -90%, transparent 50%),\
-        linear-gradient(45deg, darkred -90%, transparent 50%),\
-        linear-gradient(225deg, darkred -90%, transparent 50%),\
-        ",
+        background: "linear-gradient(-45deg, blue -90%, transparent 50%),linear-gradient(135, darkred -90%, transparent 50%),linear-gradient(45deg, darkred -90%, transparent 50%),linear-gradient(225deg, darkred -90%, transparent 50%),",
 
     }
 

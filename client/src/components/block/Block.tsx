@@ -2,19 +2,20 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 export interface BlockProps extends React.HTMLAttributes<HTMLDivElement> {
     children: JSX.Element | JSX.Element[];
-    draggable?: boolean;
+    _draggable?: Boolean;
     _style?: React.CSSProperties;
+    type?: string;
 }
 
 export function Block(props: BlockProps) {
-    const { children, draggable, _style } = props;
+    const { children, _draggable, _style } = props;
 
 
     const padding = 10;
     const [position, setPosition] = useState({ x: padding, y: padding });
 
     const [blockStyle, setBlockStyle] = React.useState<React.CSSProperties>({
-        position: draggable ? 'absolute' : 'relative',
+        position: _draggable ? 'absolute' : 'relative',
         borderRadius: '25px',
         border: '1px solid black',
         boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.25)',
@@ -30,22 +31,15 @@ export function Block(props: BlockProps) {
     const startPos = useRef({ x: 0, y: 0 });
     const ref = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setBlockStyle({
-            ...blockStyle,
-            ..._style,
-        })
-    }, [_style])
-
 
     useEffect(() => {
-        setBlockStyle({
+        setBlockStyle(blockStyle => ({
             ...blockStyle,
             ..._style,
-            top: draggable ? position.y : blockStyle.top,
-            left: draggable ? position.x : blockStyle.left,
-        })
-        if (draggable) {
+            top: _draggable ? position.y : blockStyle.top,
+            left: _draggable ? position.x : blockStyle.left,
+        }))
+        if (_draggable) {
             // console.log(`\n${children.props.children}: ${position.x} | ${position.y}`)
             if (position.x < padding) {
                 setPosition({ x: padding, y: position.y })
@@ -69,11 +63,24 @@ export function Block(props: BlockProps) {
 
         }
 
-    }, [position])
+    }, [position, _style, _draggable])
 
+
+    const elementDrag = useCallback((e: MouseEvent) => {
+        if (_draggable) {
+            const dx = e.clientX - dragStartPos.current.x;
+            const dy = e.clientY - dragStartPos.current.y;
+            setPosition({ x: startPos.current.x + dx, y: startPos.current.y + dy, })
+        }
+    }, [_draggable, dragStartPos, startPos]);
+
+    const closeDragElement = useCallback((e: MouseEvent) => {
+        document.removeEventListener('mousemove', elementDrag);
+        document.removeEventListener('mouseup', closeDragElement);
+    }, [elementDrag]);
 
     const dragStart = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        if (draggable && ref.current) {
+        if (_draggable && ref.current) {
             dragStartPos.current = {
                 x: e.clientX,
                 y: e.clientY
@@ -82,20 +89,8 @@ export function Block(props: BlockProps) {
             document.addEventListener('mousemove', elementDrag);
             document.addEventListener('mouseup', closeDragElement);
         }
-    }, [draggable, position]);
+    }, [_draggable, position, dragStartPos, startPos, elementDrag, closeDragElement]);
 
-    const elementDrag = useCallback((e: MouseEvent) => {
-        if (draggable) {
-            const dx = e.clientX - dragStartPos.current.x;
-            const dy = e.clientY - dragStartPos.current.y;
-            setPosition({ x: startPos.current.x + dx, y: startPos.current.y + dy, })
-        }
-    }, [draggable]);
-
-    const closeDragElement = useCallback(() => {
-        document.removeEventListener('mousemove', elementDrag);
-        document.removeEventListener('mouseup', closeDragElement);
-    }, []);
 
 
 
@@ -115,7 +110,7 @@ export function Block(props: BlockProps) {
     return (
         <div style={blockStyle} ref={ref} {...props}>
             {
-                draggable && <div style={headerStyle} onMouseDown={dragStart}></div>
+                _draggable && <div style={headerStyle} onMouseDown={dragStart}></div>
             }
 
             {children}

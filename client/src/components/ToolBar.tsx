@@ -21,31 +21,26 @@ export function ToolBar({ setCurrentAction, workspaceChildren, setWorkspaceChild
         justifyContent: "space-around",
         alignItems: "center",
         overflow: "hidden",
-        background: "\
-        linear-gradient(-45deg, blue -90%, transparent 50%),\
-        linear-gradient(135, darkred -90%, transparent 50%),\
-        linear-gradient(45deg, darkred -90%, transparent 50%),\
-        linear-gradient(225deg, darkred -90%, transparent 50%)\
-        "
+        background: "linear-gradient(-45deg, blue -90%, transparent 50%),linear-gradient(135, darkred -90%, transparent 50%),linear-gradient(45deg, darkred -90%, transparent 50%),linear-gradient(225deg, darkred -90%, transparent 50%)"
     }
 
     const tableAction: ToolActionProps = {
         active: false,
         onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             console.log(`\nClicked table action`)
-            e.stopPropagation();
-            // const key = workspaceChildren.length;
-            // const table =
-            //     <Block
-            //         key={key}
-            //         draggable={true}
-            //     >
-            //         <>Tavolo {key + 1}</>
-            //     </Block>
+            // read number of tables from workspaceChildren (it's in the props.type)
+            const tableCount = workspaceChildren.filter((child) => child.props.type === "table").length;
+            const table =
+                <Block
+                    key={tableCount}
+                    _draggable={true}
+                    type={"table"}
+                >
+                    <>Tavolo {tableCount + 1}</>
+                </Block>
 
-            // workspaceChildren.push(table);
-            // setWorkspaceChildren(workspaceChildren);
-            // console.log(`\nAdded table ${key + 1} to workspace`)
+            setWorkspaceChildren(workspaceChildren => [...workspaceChildren, table]);
+            console.log(`\nAdded table ${tableCount + 1} to workspace`)
         },
         label: "Table"
     }

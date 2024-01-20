@@ -14,10 +14,7 @@ export default function NavBar() {
     color: "white",
     padding: "10px",
 
-    background: "\
-    linear-gradient(-45deg, blue -30%, transparent 80%),\
-    linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque)\
-    ",
+    background: "linear-gradient(-45deg, blue -30%, transparent 80%),linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque)",
   };
 
   const navLinkStyle: NavLinkProps["style"] = ({ isActive }) => {
