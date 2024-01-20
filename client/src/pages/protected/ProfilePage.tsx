@@ -17,7 +17,17 @@ export default function ProfilePage() {
       <Workspace>
         <Block draggable style={{}} attrs={{}}>
           <>
-            Username: {user?.username}
+            Tavolo 1
+          </>
+        </Block>
+        <Block draggable style={{}} attrs={{}}>
+          <>
+            Tavolo 2
+          </>
+        </Block>
+        <Block draggable style={{}} attrs={{}}>
+          <>
+            Tavolo 3
           </>
         </Block>
       </Workspace>

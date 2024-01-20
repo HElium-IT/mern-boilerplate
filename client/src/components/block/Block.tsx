@@ -8,7 +8,7 @@ export interface BlockProps {
 }
 
 export function Block({ children, draggable = false, style = {}, attrs = {} }: BlockProps) {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [position, setPosition] = useState({ x: 10, y: 10 });
     const dragStartPos = useRef({ x: 0, y: 0 });
     const startPos = useRef({ x: 0, y: 0 });
     const ref = useRef<HTMLDivElement>(null);
@@ -44,8 +44,6 @@ export function Block({ children, draggable = false, style = {}, attrs = {} }: B
     // Block style
     const block_style = {
         position: draggable ? 'absolute' as 'absolute' : 'relative' as 'relative',
-        top: position.y,
-        left: position.x,
         borderRadius: '25px',
         border: '1px solid black',
         boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.25)',
@@ -54,13 +52,15 @@ export function Block({ children, draggable = false, style = {}, attrs = {} }: B
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        ...style
+        ...style,
+        top: draggable ? position.y : undefined,
+        left: draggable ? position.x : undefined,
     };
 
     // Header style
     const headerStyle = {
-        width: '30px',
-        height: '30px',
+        width: '25px',
+        height: '25px',
         borderRadius: '50%',
         backgroundColor: '#2196F3',
         color: '#fff',
@@ -73,13 +73,7 @@ export function Block({ children, draggable = false, style = {}, attrs = {} }: B
     return (
         <div style={block_style} {...attrs} ref={ref}>
             {
-                draggable ?
-                    <div style={headerStyle} onMouseDown={dragStart}>
-                        Drag
-                    </div>
-                    :
-                    <>
-                    </>
+                draggable && <div style={headerStyle} onMouseDown={dragStart}></div>
             }
 
             {children}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Block } from "src/components/block/Block";
 
 export interface WorkspaceProps {
@@ -6,6 +6,7 @@ export interface WorkspaceProps {
 }
 
 export function Workspace({ children }: WorkspaceProps): JSX.Element {
+    const ref = useRef<HTMLDivElement>(null);
 
     const workspace_style: React.CSSProperties = { // create a container that takes all the spaces it can get from the parent
         borderRadius: "25px",
