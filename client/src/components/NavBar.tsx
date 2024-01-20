@@ -1,35 +1,58 @@
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { useAppSelector } from "src/store/hooks";
 
+import { Block } from "src/components/block/Block";
+
 export default function NavBar() {
   const { isAuth } = useAppSelector((state) => state.user);
 
-  const navLinkClass: NavLinkProps["className"] = ({ isActive }) =>
-    isActive ? "active" : "inactive";
+  const navBarStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    color: "white",
+    padding: "10px",
+
+    background: "\
+    linear-gradient(-45deg, blue -30%, transparent 80%),\
+    linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque)\
+    ",
+  };
+
+  const navLinkStyle: NavLinkProps["style"] = ({ isActive }) => {
+    return {
+      fontWeight: isActive ? "bold" : "",
+      color: "black",
+    };
+  }
 
   return (
-    <nav className='nav'>
+    <Block style={navBarStyle}>
       {isAuth ? (
         <>
-          <NavLink className={navLinkClass} to='/my-profile'>
-            Profile
+          <NavLink style={navLinkStyle} to='/my-profile'>
+            <Block>
+              <>My Profile</>
+            </Block>
           </NavLink>
           <NavLink
-            className={({ isActive }) => (isActive ? "active logout" : "inactive")}
-            to='/logout'>
-            Logout
-          </NavLink>
+            style={navLinkStyle}
+            to='/logout'><Block>
+              <>Logout</>
+            </Block></NavLink>
+
         </>
       ) : (
         <>
-          <NavLink className={navLinkClass} to='/login'>
+          <Block><NavLink style={navLinkStyle} to='/login'>
             Login
-          </NavLink>
-          <NavLink className={navLinkClass} to='/register'>
+          </NavLink></Block>
+          <Block><NavLink style={navLinkStyle} to='/register'>
             Register
-          </NavLink>
+          </NavLink></Block>
         </>
       )}
-    </nav>
+    </Block >
   );
 }

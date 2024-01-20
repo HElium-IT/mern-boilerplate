@@ -1,14 +1,26 @@
 import { useAppSelector } from "src/store/hooks";
+import Workspace from "src/components/Workspace";
+import ToolBar from "src/components/ToolBar";
+import ToolAction from "src/components/ToolAction";
+import { Block } from "src/components/block/Block";
 
 export default function ProfilePage() {
   const user = useAppSelector((state) => state.user.user);
 
   return (
-    <div className='container'>
-      <p>
-        Hey <b>{user?.username}</b>, welcome to your profile page.
-        Your email is <b>{user?.email}</b>.
-      </p>
-    </div>
+    <>
+      <ToolBar>
+        <ToolAction onClick={() => { console.log("click") }}>
+          <>log "click"</>
+        </ToolAction>
+      </ToolBar>
+      <Workspace>
+        <Block draggable style={{}} attrs={{}}>
+          <>
+            Username: {user?.username}
+          </>
+        </Block>
+      </Workspace>
+    </>
   );
 }
