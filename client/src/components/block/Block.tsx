@@ -1,17 +1,76 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 
-export interface BlockProps {
+export interface BlockProps extends React.HTMLAttributes<HTMLDivElement> {
     children: JSX.Element | JSX.Element[];
     draggable?: boolean;
-    style?: React.CSSProperties;
-    attrs?: React.HTMLAttributes<HTMLDivElement>;
+    _style?: React.CSSProperties;
 }
 
-export function Block({ children, draggable = false, style = {}, attrs = {} }: BlockProps) {
-    const [position, setPosition] = useState({ x: 10, y: 10 });
+export function Block(props: BlockProps) {
+    const { children, draggable, _style } = props;
+
+
+    const padding = 10;
+    const [position, setPosition] = useState({ x: padding, y: padding });
+
+    const [blockStyle, setBlockStyle] = React.useState<React.CSSProperties>({
+        position: draggable ? 'absolute' : 'relative',
+        borderRadius: '25px',
+        border: '1px solid black',
+        boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.25)',
+        padding: '10px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+    })
+
+
     const dragStartPos = useRef({ x: 0, y: 0 });
     const startPos = useRef({ x: 0, y: 0 });
     const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setBlockStyle({
+            ...blockStyle,
+            ..._style,
+        })
+    }, [_style])
+
+
+    useEffect(() => {
+        setBlockStyle({
+            ...blockStyle,
+            ..._style,
+            top: draggable ? position.y : blockStyle.top,
+            left: draggable ? position.x : blockStyle.left,
+        })
+        if (draggable) {
+            // console.log(`\n${children.props.children}: ${position.x} | ${position.y}`)
+            if (position.x < padding) {
+                setPosition({ x: padding, y: position.y })
+            }
+            if (position.y < padding) {
+                setPosition({ x: position.x, y: padding })
+            }
+            // now do the same for the max values, refferint to parent div, consider padding
+            if (ref.current) {
+                const parentWidth = ref.current.parentElement?.clientWidth || 0;
+                const parentHeight = ref.current.parentElement?.clientHeight || 0;
+                const childWidth = ref.current.clientWidth;
+                const childHeight = ref.current.clientHeight;
+                if (position.x + childWidth > parentWidth - padding) {
+                    setPosition({ x: parentWidth - padding - childWidth, y: position.y })
+                }
+                if (position.y + childHeight > parentHeight - padding) {
+                    setPosition({ x: position.x, y: parentHeight - padding - childHeight })
+                }
+            }
+
+        }
+
+    }, [position])
+
 
     const dragStart = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (draggable && ref.current) {
@@ -29,10 +88,7 @@ export function Block({ children, draggable = false, style = {}, attrs = {} }: B
         if (draggable) {
             const dx = e.clientX - dragStartPos.current.x;
             const dy = e.clientY - dragStartPos.current.y;
-            setPosition({
-                x: startPos.current.x + dx,
-                y: startPos.current.y + dy
-            });
+            setPosition({ x: startPos.current.x + dx, y: startPos.current.y + dy, })
         }
     }, [draggable]);
 
@@ -41,21 +97,7 @@ export function Block({ children, draggable = false, style = {}, attrs = {} }: B
         document.removeEventListener('mouseup', closeDragElement);
     }, []);
 
-    // Block style
-    const block_style = {
-        position: draggable ? 'absolute' as 'absolute' : 'relative' as 'relative',
-        borderRadius: '25px',
-        border: '1px solid black',
-        boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.25)',
-        padding: '10px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        ...style,
-        top: draggable ? position.y : undefined,
-        left: draggable ? position.x : undefined,
-    };
+
 
     // Header style
     const headerStyle = {
@@ -71,7 +113,7 @@ export function Block({ children, draggable = false, style = {}, attrs = {} }: B
     };
 
     return (
-        <div style={block_style} {...attrs} ref={ref}>
+        <div style={blockStyle} ref={ref} {...props}>
             {
                 draggable && <div style={headerStyle} onMouseDown={dragStart}></div>
             }

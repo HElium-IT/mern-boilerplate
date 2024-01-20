@@ -28,7 +28,7 @@ export default function NavBar() {
   }
 
   return (
-    <Block style={navBarStyle}>
+    <Block _style={navBarStyle}>
       {isAuth ? (
         <>
           <NavLink style={navLinkStyle} to='/my-profile'>

@@ -1,11 +1,13 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Block } from "src/components/block/Block";
+import { ToolActionProps } from "./ToolAction";
 
 export interface WorkspaceProps {
     children: JSX.Element | JSX.Element[];
+    activeAction?: ToolActionProps
 }
 
-export function Workspace({ children }: WorkspaceProps): JSX.Element {
+export function Workspace({ children, activeAction }: WorkspaceProps): JSX.Element {
     const ref = useRef<HTMLDivElement>(null);
 
     const workspace_style: React.CSSProperties = { // create a container that takes all the spaces it can get from the parent
@@ -34,9 +36,15 @@ export function Workspace({ children }: WorkspaceProps): JSX.Element {
 
     }
 
+    useEffect(() => {
+        if (activeAction !== undefined) {
+            console.log(`\nActivated action: ${activeAction.label}`)
+        }
+    }, [activeAction])
+
     return (
         // return a container with style
-        <Block style={workspace_style}>
+        <Block _style={workspace_style} onClick={activeAction?.onClick}>
             {children}
         </Block>
     )

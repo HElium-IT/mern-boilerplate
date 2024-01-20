@@ -1,11 +1,14 @@
 import React from "react";
 import { Block } from "src/components/block/Block";
+import ToolAction, { ToolActionProps } from "src/components/ToolAction";
 
 export interface ToolBarProps {
-    children: JSX.Element | JSX.Element[];
+    setCurrentAction: React.Dispatch<React.SetStateAction<ToolActionProps | undefined>>;
+    workspaceChildren: JSX.Element[];
+    setWorkspaceChildren: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
 }
 
-export function ToolBar({ children }: ToolBarProps): JSX.Element {
+export function ToolBar({ setCurrentAction, workspaceChildren, setWorkspaceChildren }: ToolBarProps): JSX.Element {
 
     const toolBarStyle: React.CSSProperties = { // create a container that takes all the spaces it can get from the parent
         borderRadius: "25px",
@@ -24,13 +27,66 @@ export function ToolBar({ children }: ToolBarProps): JSX.Element {
         linear-gradient(45deg, darkred -90%, transparent 50%),\
         linear-gradient(225deg, darkred -90%, transparent 50%)\
         "
-
     }
+
+    const tableAction: ToolActionProps = {
+        active: false,
+        onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            console.log(`\nClicked table action`)
+            e.stopPropagation();
+            // const key = workspaceChildren.length;
+            // const table =
+            //     <Block
+            //         key={key}
+            //         draggable={true}
+            //     >
+            //         <>Tavolo {key + 1}</>
+            //     </Block>
+
+            // workspaceChildren.push(table);
+            // setWorkspaceChildren(workspaceChildren);
+            // console.log(`\nAdded table ${key + 1} to workspace`)
+        },
+        label: "Table"
+    }
+
+    const [actions, setActions] = React.useState<ToolActionProps[]>(
+        [tableAction]
+    );
+
+    const clickAction = (actionKey: string) => {
+        console.log(`\nClicked action: ${actionKey}`)
+        let activeAction = undefined
+        actions.forEach((action) => {
+            if (action.label === actionKey) {
+                if (action.active === false) {
+                    action.active = true;
+                    activeAction = action;
+                } else {
+                    action.active = false;
+                }
+            } else {
+                action.active = false;
+            }
+        })
+        setActions(actions);
+        setCurrentAction(activeAction);
+    }
+
 
     return (
         // return a container with style
-        <Block style={toolBarStyle}>
-            {children}
+        <Block _style={toolBarStyle}>
+            {
+                actions.map((action, index) => {
+                    return <ToolAction
+                        key={index}
+                        active={action.active}
+                        onClick={() => clickAction(action.label)}
+                        label={action.label}
+                    />
+                })
+            }
         </Block>
     )
 }

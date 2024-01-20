@@ -1,34 +1,70 @@
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, useEffect } from 'react';
 import { Block } from './block/Block';
 
-interface ToolActionProps {
+export interface ToolActionProps {
     onClick: MouseEventHandler<HTMLDivElement>;
-    children: JSX.Element | JSX.Element[];
+    active: boolean;
+    label: string;
 }
 
-const ToolAction: React.FC<ToolActionProps> = ({ onClick, children }) => {
+const ToolAction: React.FC<ToolActionProps> = ({ onClick, label, active }) => {
 
-    const block_style: React.CSSProperties = {
+    const activeStyle = {
+        background: "linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque)",
+        color: "black",
+    }
+
+    const notActiveStyle = {
+        background: "linear-gradient(45deg, lightblue 20%, blue, darkblue 60%, darkcyan)",
+        color: "white"
+    }
+
+    const [blockStyle, setBlockStyle] = React.useState<React.CSSProperties>({
         cursor: "pointer",
         transition: "transform 0.2s ease-in-out",
-    }
-    const block_attrs = {
-        onClick: onClick,
-        onMouseEnter: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            // make the button do an animation where he goes up and comes back
-            const target = e.target as HTMLDivElement;
-            target.style.transform = "translateY(-5px)";
-            // make a smoother translation
-        },
-        onMouseLeave: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            // make the button do an animation where he goes up and comes back
-            const target = e.target as HTMLDivElement;
-            target.style.transform = "translateY(0px)";
+        ...notActiveStyle
+    });
+
+    useEffect(() => {
+        // if active, updateStyle with a different background, with a gradient
+        if (active) {
+            console.log(`\n${label} is active`)
+            setBlockStyle({
+                ...blockStyle,
+                ...activeStyle
+            })
+        } else {
+            console.log(`\n${label} is not active`)
+            setBlockStyle({
+                ...blockStyle,
+                ...notActiveStyle
+            })
         }
-    };
+
+    }, [active])
+
+
+
+    const onBlockClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        active = !active
+        onClick(e);
+    }
+
+    const onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        // make the button do an animation where he goes up and comes back
+        const target = e.target as HTMLDivElement;
+        target.style.transform = "translateY(-5px)";
+        // make a smoother translation
+    }
+    const onMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        // make the button do an animation where he goes up and comes back
+        const target = e.target as HTMLDivElement;
+        target.style.transform = "translateY(0px)";
+    }
+
     return (
-        <Block style={block_style} attrs={block_attrs} >
-            {children}
+        <Block _style={blockStyle} onClick={onBlockClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} >
+            <>{label}</>
         </Block>
     );
 };
