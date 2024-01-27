@@ -10,37 +10,27 @@ export interface ToolBarProps {
 
 export function ToolBar({ setCurrentAction, workspaceChildren, setWorkspaceChildren }: ToolBarProps): JSX.Element {
 
-    const toolBarStyle: React.CSSProperties = { // create a container that takes all the spaces it can get from the parent
-        borderRadius: "25px",
-        border: "1px solid black",
-        boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
-        padding: "10px",
-        margin: "10px",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-around",
-        alignItems: "center",
-        overflow: "hidden",
-        background: "linear-gradient(-45deg, blue -90%, transparent 50%),linear-gradient(135, darkred -90%, transparent 50%),linear-gradient(45deg, darkred -90%, transparent 50%),linear-gradient(225deg, darkred -90%, transparent 50%)"
-    }
 
     const tableAction: ToolActionProps = {
         active: false,
         onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             console.log(`\nClicked table action`)
             // read number of tables from workspaceChildren (it's in the props.type)
-            const tableCount = workspaceChildren.filter((child) => child.props.type === "table").length;
             const table =
                 <Block
-                    key={tableCount}
-                    _draggable={true}
-                    type={"table"}
+                    key={workspaceChildren.length}
+                    className="table"
+                    is_draggable={true}
+                    style={{
+                        top: e.clientY,
+                        left: e.clientX,
+                    }}
                 >
-                    <>Tavolo {tableCount + 1}</>
+                    <>Tavolo </>
                 </Block>
 
             setWorkspaceChildren(workspaceChildren => [...workspaceChildren, table]);
-            console.log(`\nAdded table ${tableCount + 1} to workspace`)
+            console.log(`\nAdded table to workspace`)
         },
         label: "Table"
     }
@@ -71,7 +61,7 @@ export function ToolBar({ setCurrentAction, workspaceChildren, setWorkspaceChild
 
     return (
         // return a container with style
-        <Block _style={toolBarStyle}>
+        <Block className="tool-bar">
             {
                 actions.map((action, index) => {
                     return <ToolAction

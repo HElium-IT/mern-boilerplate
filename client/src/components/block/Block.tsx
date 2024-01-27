@@ -2,29 +2,19 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 export interface BlockProps extends React.HTMLAttributes<HTMLDivElement> {
     children: JSX.Element | JSX.Element[];
-    _draggable?: Boolean;
-    _style?: React.CSSProperties;
-    type?: string;
+    is_draggable?: Boolean;
 }
 
 export function Block(props: BlockProps) {
-    const { children, _draggable, _style } = props;
-
+    const { children, is_draggable, className, style } = props;
 
     const padding = 10;
-    const [position, setPosition] = useState({ x: padding, y: padding });
+    const [position, setPosition] = useState({ x: (style?.left as number) ?? padding, y: (style?.top as number) ?? padding });
 
-    const [blockStyle, setBlockStyle] = React.useState<React.CSSProperties>({
-        position: _draggable ? 'absolute' : 'relative',
-        borderRadius: '25px',
-        border: '1px solid black',
-        boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.25)',
-        padding: '10px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-    })
+    const [draggable_style, setDraggableStyle] = useState<React.CSSProperties>({
+        ...style,
+    });
+
 
 
     const dragStartPos = useRef({ x: 0, y: 0 });
@@ -33,13 +23,14 @@ export function Block(props: BlockProps) {
 
 
     useEffect(() => {
-        setBlockStyle(blockStyle => ({
-            ...blockStyle,
-            ..._style,
-            top: _draggable ? position.y : blockStyle.top,
-            left: _draggable ? position.x : blockStyle.left,
-        }))
-        if (_draggable) {
+
+        if (is_draggable) {
+            console.log(`\n${children.props.children}: ${position.x} | ${position.y}`);
+            setDraggableStyle({
+                ...style,
+                top: position.y,
+                left: position.x,
+            });
             // console.log(`\n${children.props.children}: ${position.x} | ${position.y}`)
             if (position.x < padding) {
                 setPosition({ x: padding, y: position.y })
@@ -63,16 +54,16 @@ export function Block(props: BlockProps) {
 
         }
 
-    }, [position, _style, _draggable])
+    }, [position, style, is_draggable])
 
 
     const elementDrag = useCallback((e: MouseEvent) => {
-        if (_draggable) {
+        if (is_draggable) {
             const dx = e.clientX - dragStartPos.current.x;
             const dy = e.clientY - dragStartPos.current.y;
             setPosition({ x: startPos.current.x + dx, y: startPos.current.y + dy, })
         }
-    }, [_draggable, dragStartPos, startPos]);
+    }, [is_draggable, dragStartPos, startPos]);
 
     const closeDragElement = useCallback((e: MouseEvent) => {
         document.removeEventListener('mousemove', elementDrag);
@@ -80,7 +71,7 @@ export function Block(props: BlockProps) {
     }, [elementDrag]);
 
     const dragStart = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        if (_draggable && ref.current) {
+        if (is_draggable && ref.current) {
             dragStartPos.current = {
                 x: e.clientX,
                 y: e.clientY
@@ -89,28 +80,23 @@ export function Block(props: BlockProps) {
             document.addEventListener('mousemove', elementDrag);
             document.addEventListener('mouseup', closeDragElement);
         }
-    }, [_draggable, position, dragStartPos, startPos, elementDrag, closeDragElement]);
+    }, [is_draggable, position, dragStartPos, startPos, elementDrag, closeDragElement]);
 
-
-
-
-    // Header style
-    const headerStyle = {
-        width: '25px',
-        height: '25px',
-        borderRadius: '50%',
-        backgroundColor: '#2196F3',
-        color: '#fff',
-        textAlign: 'center' as 'center',
-        lineHeight: '30px',
-        cursor: 'move',
-        marginRight: '10px',
-    };
 
     return (
-        <div style={blockStyle} ref={ref} {...props}>
+        <div {...props}
+            ref={ref}
+            className={
+                'block ' +
+                (is_draggable ? 'draggable ' : '') +
+                (className ?? '')}
+
+            style={
+                is_draggable ? draggable_style : style
+            }
+        >
             {
-                _draggable && <div style={headerStyle} onMouseDown={dragStart}></div>
+                is_draggable && <div className='block-header' onMouseDown={dragStart}></div>
             }
 
             {children}

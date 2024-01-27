@@ -1,0 +1,91 @@
+/* For dynamic styles in Block and ToolAction */
+.block {
+    /* Base static styles defined here */
+    /* Dynamic aspects handled in the component, example: */
+    /* <div className={`block ${dynamicCondition ? 'dynamic-class' : ''}`} style={dynamicStyles}></div> */
+    border-radius: 25px;
+    border: 1px solid black;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.25);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+.block.draggable {
+    /* Example dynamic styles */
+    /* Additional specific dynamic styles for Block can be added here */
+    cursor: move;
+    border: 1px dashed black;
+    transition: transform 0.2s ease-in-out;
+    position: absolute;
+}
+
+.block-header {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #2196F3;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    cursor: move;
+    margin-right: 10px;
+}
+
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+    padding: 10px;
+    background: linear-gradient(-45deg, blue, red);
+    /* Example gradient */
+    /* Additional specific static styles for NavBar can be added here */
+}
+
+.tool-bar {
+
+    margin: 10px;
+    justify-content: space-around;
+    overflow: hidden;
+    background: linear-gradient(-45deg, blue 90%, transparent 50%), linear-gradient(135deg, darkred 90%, transparent 50%), linear-gradient(45deg, darkred 90%, transparent 50%), linear-gradient(225deg, darkred 90%, transparent 50%);
+}
+
+.tool-action {
+    /* Base styles for ToolBar will be added here */
+    /* Example: display: flex; */
+    /* Dynamic styles will be handled in the component using inline styles or conditional classes */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    background: linear-gradient(45deg, lightblue 20%, blue, darkblue 60%, darkcyan);
+    color: white;
+}
+
+.tool-action:hover {
+    transform: translateY(-5px);
+}
+
+.tool-action.active {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, darkred 20%, crimson, darkorange 60%, gold, bisque);
+    color: black;
+}
+
+
+.tool-action:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.workspace {
+    margin: 10px;
+    flex-direction: row;
+    justify-content: space-around;
+    overflow: hidden;
+    z-index: 9;
+    min-height: 600px;
+    background: linear-gradient(-45deg, blue -90%, transparent 50%), linear-gradient(135, darkred -90%, transparent 50%), linear-gradient(45deg, darkred -90%, transparent 50%), linear-gradient(225deg, darkred -90%, transparent 50%);
+}
